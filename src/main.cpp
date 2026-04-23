@@ -23,10 +23,12 @@ StackchanSERVO servo;
 
 // M5GoBottomのLEDを使わない場合は下記の1行をコメントアウトしてください。
 #define USE_LED
+#define USE_LED_OUT
 
 #ifdef USE_LED
   #include <FastLED.h>
   #define NUM_LEDS 10
+  #define NUM_LED_OUT 55
 #if defined(ARDUINO_M5STACK_FIRE) || defined(ARDUINO_M5Stack_Core_ESP32)
   // M5Core1 + M5GoBottom1の組み合わせ
   #define LED_PIN 15
@@ -243,7 +245,7 @@ void avrc_metadata_callback(uint8_t data1, const uint8_t *data2)
 void avatarStart() {
   avatar.start();  
   avatar.addTask(lipSync, "lipSync");
-  avatar.addTask(servoLoop, "servoLoop");
+  avatar.addTask(servoLoop, "servoLoop", 4096U, 1);
 }
 void avatarStop() {
   avatar.stop();  
@@ -340,7 +342,7 @@ void setup(void)
   last_powericon_millis = millis();
 
   avatar.addTask(lipSync, "lipSync");
-  avatar.addTask(servoLoop, "servoLoop", 2048U, 1);
+  avatar.addTask(servoLoop, "servoLoop", 4096U, 1);
   avatar.setExpression(Expression::Neutral);
   avatar.setSpeechFont(system_config.getFont());
 
